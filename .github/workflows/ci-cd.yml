@@ -1,0 +1,12 @@
+name: My First CI Pipeline
+on: [push] # This is the part that was missing or broken
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run a greeting
+        run: echo "Hello, GitHub Actions is running!"
