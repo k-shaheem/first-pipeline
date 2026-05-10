@@ -15,7 +15,7 @@ jobs:
       - name: Check Website Availability
         run: |
           URL="https://google.com"
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+          RESPONSE=$(curl -Ls -o /dev/null -w "%{http_code}" $URL)
           if [ "$RESPONSE" -ne 200 ]; then
             echo "CRITICAL: $URL is down with status $RESPONSE"
             exit 1
