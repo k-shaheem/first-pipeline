@@ -12,10 +12,16 @@ jobs:
         env:
           MY_URL: ${{ secrets.TRGET_URL }}
         run: |
+          # Debug: Print the number of characters in the URL (doesn't reveal the secret)
+          echo "URL length is: ${#MY_URL} characters"
+          
+          # Try the curl command
           RESPONSE=$(curl -Ls -o /dev/null -w "%{http_code}" "$MY_URL")
+          
           if [ "$RESPONSE" -eq 200 ]; then
-            echo "SUCCESS: The target is healthy (Status 200)"
+            echo "SUCCESS: Healthy (Status 200)"
           else
-            echo "CRITICAL: The target returned status $RESPONSE"
+            echo "CRITICAL: Status $RESPONSE"
             exit 1
           fi
+
