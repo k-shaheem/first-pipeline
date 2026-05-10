@@ -1,22 +1,27 @@
-name: My First CI Pipeline
-on: [push]
+name: Cloud Health Watchdog
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour on the hour
 
 jobs:
-  build-and-test:
+  health-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22' # Using a newer version to avoid those warnings!
-
-      - name: Install dependencies
-        run: echo "In a real project, I would run 'npm install' here"
-
-      - name: Run Build
+      - name: Check Website Availability
         run: |
-          echo "Building the project..."
-          echo "Build successful!"
+          URL="https://google.com"
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "CRITICAL: $URL is down with status $RESPONSE"
+            exit 1
+          else
+            echo "SUCCESS: $URL is healthy (Status 200)"
+          fi
+
+      - name: Log Timestamp
+        run: echo "Last check performed at $(date)"
