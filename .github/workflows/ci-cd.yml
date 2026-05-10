@@ -1,5 +1,5 @@
 name: My First CI Pipeline
-on: [push] # This is the part that was missing or broken
+on: [push]
 
 jobs:
   build-and-test:
@@ -8,5 +8,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run a greeting
-        run: echo "Hello, GitHub Actions is running!"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22' # Using a newer version to avoid those warnings!
+
+      - name: Install dependencies
+        run: echo "In a real project, I would run 'npm install' here"
+
+      - name: Run Build
+        run: |
+          echo "Building the project..."
+          echo "Build successful!"
