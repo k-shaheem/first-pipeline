@@ -1,27 +1,14 @@
-name: Cloud Health Watchdog
-on:
-  push:
-    branches: [ main ]
-  schedule:
-    - cron: '0 * * * *'  # Runs every hour on the hour
-
-jobs:
-  health-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Check Website Availability
+        env:
+          # This must match the name you saved in GitHub exactly
+          MY_URL: ${{ secrets.TARGET_URL }} 
         run: |
-          URL="https://google.com"
-          RESPONSE=$(curl -Ls -o /dev/null -w "%{http_code}" $URL)
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "CRITICAL: $URL is down with status $RESPONSE"
-            exit 1
+          # Now we use the $MY_URL variable
+          RESPONSE=$(curl -Ls -o /dev/null -w "%{http_code}" "$MY_URL")
+          
+          if [ "$RESPONSE" -eq 200 ]; then
+            echo "SUCCESS: The target is healthy (Status 200)"
           else
-            echo "SUCCESS: $URL is healthy (Status 200)"
+            echo "CRITICAL: The target returned status $RESPONSE"
+            exit 1
           fi
-
-      - name: Log Timestamp
-        run: echo "Last check performed at $(date)"
