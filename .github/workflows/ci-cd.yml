@@ -10,7 +10,7 @@ jobs:
 
       - name: Check Website Availability
         env:
-          MY_URL: ${{ secrets.TRGET_URL }}
+          MY_URL: ${{ secrets.TARGET_URL }}
         run: |
           # Debug: Print the number of characters in the URL (doesn't reveal the secret)
           echo "URL length is: ${#MY_URL} characters"
