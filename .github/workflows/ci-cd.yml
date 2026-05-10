@@ -1,11 +1,18 @@
+name: Cloud Health Watchdog
+on: [push]
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Check Website Availability
         env:
-          # This must match the name you saved in GitHub exactly
-          MY_URL: ${{ secrets.TARGET_URL }} 
+          MY_URL: ${{ secrets.TRGET_URL }}
         run: |
-          # Now we use the $MY_URL variable
           RESPONSE=$(curl -Ls -o /dev/null -w "%{http_code}" "$MY_URL")
-          
           if [ "$RESPONSE" -eq 200 ]; then
             echo "SUCCESS: The target is healthy (Status 200)"
           else
